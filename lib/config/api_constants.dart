@@ -2,9 +2,8 @@
 
 class ApiConstants {
   // Base URL
-  static const String baseUrl =
-      'https://api.finance-dashboard.example.com/api/v1';
-
+  // static const String baseUrl = 'https://api.finance-dashboard.example.com/api/v1';
+  static const String baseUrl = 'http://127.0.0.1:8000/api/v1';
   // Auth endpoints
   static const String login = '/auth/login';
   static const String register = '/auth/register';

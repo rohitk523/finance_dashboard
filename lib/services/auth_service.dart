@@ -31,26 +31,52 @@ class AuthService {
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
+      print('Attempting login with username: $email and password: $password');
+
+      // Add logging interceptor temporarily
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+        error: true,
+      ));
+
       final response = await _dio.post(
         ApiConstants.login,
-        data: {
-          'email': email,
+        data: FormData.fromMap({
+          'username': email,
           'password': password,
-        },
+        }),
+        options: Options(
+          contentType: 'application/x-www-form-urlencoded',
+        ),
       );
 
+      print('Login response status: ${response.statusCode}');
+      print('Login response data: ${response.data}');
+
       if (response.statusCode == 200) {
+        if (response.data == null) {
+          print('WARNING: Response data is null despite 200 status code');
+          throw Exception('Server returned empty response');
+        }
         return response.data;
       } else {
         throw Exception('Login failed: ${response.statusMessage}');
       }
     } on DioException catch (e) {
+      print('DioException: ${e.type}');
+      print('Error message: ${e.message}');
+      print('Response data: ${e.response?.data}');
+      print('Status code: ${e.response?.statusCode}');
+
       if (e.response != null) {
-        throw Exception(e.response?.data['message'] ?? 'Login failed');
+        throw Exception(e.response?.data['message'] ??
+            'Login failed with status ${e.response?.statusCode}');
       } else {
         throw Exception('Network error: ${e.message}');
       }
     } catch (e) {
+      print('Unexpected error: $e');
       throw Exception('Login failed: $e');
     }
   }

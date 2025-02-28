@@ -111,11 +111,11 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: 'Finance Dashboard',
             theme: AppTheme.lightTheme(),
-            // initialRoute: authProvider.isAuthenticated
-            //     ? DashboardScreen.routeName
-            //     : LoginScreen.routeName,
+            initialRoute: authProvider.isAuthenticated
+                ? DashboardScreen.routeName
+                : LoginScreen.routeName,
             // Bypassing for now:
-            home: const DashboardScreen(),
+            // home: const DashboardScreen(),
             routes: AppRoutes.routes,
             onGenerateRoute: AppRoutes.generateRoute,
             debugShowCheckedModeBanner: false,
